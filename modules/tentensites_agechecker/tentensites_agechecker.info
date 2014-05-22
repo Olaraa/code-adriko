@@ -1,0 +1,10 @@
+name = "Ten Ten Sites - Age Checker Module"
+description = "Limit access to specific paths based on user's age"
+package = "Ten Ten Sites"
+core = "7.x"
+
+files[] = tentensites_agechecker.install
+files[] = tentensites_agechecker.admin.inc
+files[] = tentensites_agechecker.module
+
+configure = admin/config/content/age-verification-settings

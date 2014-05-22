@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * @file
+ * Implementation of module.install
+ */
+
+/**
+ * Implementation of hook_install()
+ */
+function validateage_install() {
+  drupal_install_schema('validateage');
+}
+
+/**
+ * Implementation of hook_schema()
+ */
+function validateage_schema() {
+  $schema = array();
+  $schema['validateage'] = array(
+    'fields' => array(
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'month' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'day' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'year' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'indexes' => array(
+      'month' => array('month'),
+      'day' => array('day'),
+      'year' => array('year'),
+    ),
+    'primary key' => array('uid'),
+  );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_uninstall()
+ */
+function validateage_uninstall() {
+  drupal_uninstall_schema('validateage');
+  _validateage_variable_del_all('validateage_');
+}
+
+/**
+ * Utility function that is an altered version of variable_del, it will delete
+ * a set of variables set by a module.
+ *
+ * @global <type> $conf
+ * @param string $name The variables' namespace for which to delete
+ */
+function _validateage_variable_del_all($name) {
+  global $conf;
+
+  db_query("DELETE FROM {variable} WHERE name LIKE '%s%%'", $name);
+  cache_clear_all('variables', 'cache');
+
+  unset($conf[$name]);
+}
+
+/**
+ * Implementation of hook_update().
+ */
+function validateage_update_6000() {
+  $ret = array();
+  $schema = validateage_schema();
+  db_create_table($ret, 'validateage', $schema['validateage']);
+  return $ret;
+}
+
+/**
+ * Implementation of hook_update().
+ */
+function validateage_update_6010() {
+  db_query("DELETE FROM {variable} WHERE name = 'validateage_age_years'");
+}
+
+
+/**
+ * Implementation of hook_update().
+ */
+function validateage_update_6011() {
+  menu_cache_clear_all();
+}

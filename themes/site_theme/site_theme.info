@@ -1,0 +1,18 @@
+name = Theme being developed for this site
+description = Theme being developed for this site
+core = 7.x
+
+stylesheets[all][] = css/reset.css
+stylesheets[all][] = css/style.css
+stylesheets[all][] = css/temp-tovi.css
+
+scripts[] = scripts/jquery.infieldlabel.min.js
+scripts[] = scripts/script.js
+
+regions[home_page_banner] = Home Page Banner
+regions[content] = Content
+regions[content_2] = After Main Content
+regions[sidebar_second] = Right sidebar
+regions[after_cols] = After Content Columns
+regions[footer] = Footer
+regions[before_drupal_messages] = Before Drupal Messages

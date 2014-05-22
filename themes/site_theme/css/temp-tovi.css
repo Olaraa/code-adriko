@@ -1,0 +1,328 @@
+/******* products page ************************************************************************/
+body.page-views-products {
+	background: #fff;
+}
+body.page-views-products .view-header {
+	padding-top: 62px;
+	position: relative;
+	z-index: 10;
+}
+body.page-views-products .view-content {
+	position: relative;
+	z-index: 5;
+	margin-top: -27px;
+}
+body.page-views-products .products-intro {
+	text-align: center;
+	padding: 8px 100px 0;
+}
+	body.page-views-products .products-intro p.first {
+		padding-bottom: 10px;
+	}
+body.page-views-products #page-wrapper {
+	background: url("../images/products-landing-page-bg.jpg") no-repeat center 245px;
+	height: 820px;
+}
+body.page-views-products .view-products ul {
+	height: 577px;
+	overflow: hidden;
+}
+body.page-views-products .view-products li {
+	float: left;
+	height: 577px;
+	width: 180px;
+	padding-left: 15px;
+}
+	body.page-views-products .view-products li.views-row-first {
+		padding-left: 0;
+	}
+body.page-views-products .view-content a {
+	display: block;
+	text-align: center;
+	color: #20190f;
+	position: relative;
+	padding-top: 362px;
+	-webkit-transition: color .6s ease;
+	-moz-transition: color .6s ease;
+	-o-transition: color .6s ease;
+	-ms-transition: color .6s ease;
+	transition: color .6s ease;
+}
+body.page-views-products .view-products span {
+	display: block;
+	position: relative;
+}
+	body.page-views-products .view-products span.img {
+		position: absolute;
+		left: 0; top: 0;
+		width: 180px; height: 390px;
+		z-index: 1;
+	}
+		body.page-views-products .view-products span.product-img {
+			height: 390px; width: 92px;
+			background: url("../images/products-landing-page.png") no-repeat 0 0;
+			margin: 0 auto;
+			z-index: 10;
+		}
+		body.page-views-products .view-products span.product-img-bg {
+			width: 177px; height: 420px;
+			background: url("../images/products-landing-page.png") no-repeat -320px 0;
+			z-index: 1;
+			position: absolute;
+			left: 0; top: 0;
+			opacity: 0;
+			-webkit-transition: opacity .6s ease;
+			-moz-transition: opacity .6s ease;
+			-o-transition: opacity .6s ease;
+			-ms-transition: opacity .6s ease;
+			transition: opacity .6s ease;
+		}
+	
+	/** sunshine water ****/
+	body.page-views-products .view-products span.img-nid-30 {
+		top: 67px;
+		height: 333px;
+	}
+		body.page-views-products .view-products span.img-nid-30 span.product-img {
+			background-position: -237px 0;
+			width: 85px; height: 333px;
+		}
+		body.page-views-products .view-products span.img-nid-30 span.product-img-bg {
+			background-position: -497px 0;
+			width: 162px; height: 426px;
+			top: -79px; left: 12px;
+		}
+	
+	/** hunters gin ****/
+	/** 7 Hills Vodka ****/
+	body.page-views-products .view-products span.img-nid-27,
+	body.page-views-products .view-products span.img-nid-26 {
+		top: 155px;
+		height: 233px;
+	}
+		body.page-views-products .view-products span.img-nid-27 span.product-img,
+		body.page-views-products .view-products span.img-nid-26 span.product-img {
+			background-position: -91px 0;
+			width: 146px; height: 233px;
+		}
+			body.page-views-products .view-products span.img-nid-26 span.product-img {
+				background-position: -91px -233px;
+			}
+		body.page-views-products .view-products span.img-nid-27 span.product-img-bg,
+		body.page-views-products .view-products span.img-nid-26 span.product-img-bg {
+			background-position: -659px 0;
+			width: 177px; height: 236px;
+			top: -25px; left: 12px;
+		}
+	
+	body.page-views-products .view-products span.desc {
+		z-index: 10;
+		-webkit-transition: background-color .6s ease;
+		-moz-transition: background-color .6s ease;
+		-o-transition: background-color .6s ease;
+		-ms-transition: background-color .6s ease;
+		transition: background-color .6s ease;
+	}
+	body.page-views-products .view-products span.arrow {
+		height: 8px;
+		background: url("../images/products-landing-page-arrow.png") no-repeat center top;
+		overflow: hidden;
+		z-index: 10;
+		opacity: 0;
+		-webkit-transition: opacity .6s ease;
+		-moz-transition: opacity .6s ease;
+		-o-transition: opacity .6s ease;
+		-ms-transition: opacity .6s ease;
+		transition: opacity .6s ease;
+	}
+	body.page-views-products .view-products span.title {
+		text-transform: uppercase;
+		font-weight: bold;
+		padding: 20px 0 18px;
+		font-size: 18px;
+	}
+		.wf-oswald-n7-active body.page-views-products .view-products a span.title {
+			font-family: "Oswald", sans-serif;
+			font-size: 24px;
+		}
+	body.page-views-products .view-products a span.link {
+		text-transform: uppercase;
+		color: #fefefe;
+		line-height: 34px;
+		background: #e94e1b none;
+		-webkit-transition: color .6s ease;
+		-moz-transition: color .6s ease;
+		-o-transition: color .6s ease;
+		-ms-transition: color .6s ease;
+		transition: color .6s ease;
+	}
+		.wf-oswald-n4-active body.page-views-products .view-products a span.link {
+			font-family: "Oswald", sans-serif;
+		}
+	body.page-views-products .view-products span.body {
+		padding: 0 14px 14px;
+		height: 105px;
+	}
+body.page-views-products .view-products li a:hover {
+	color: #fff;
+}
+	body.page-views-products .view-products a:hover span.link {
+		color: #e3db00;
+	}
+	body.page-views-products .view-products a:hover span.title {
+		color: #fef400;
+	}
+	body.page-views-products .view-products a:hover span.desc {
+		background: #e94e1b;
+	}
+	body.page-views-products .view-products a:hover span.arrow {
+		opacity: 1;
+	}
+	body.page-views-products .view-products a:hover span.product-img-bg {
+		opacity: 1;
+	}
+
+
+/************ age verification page ************************************************************/
+body.page-age-verification {
+	background: #fff;
+}
+	body.page-age-verification .page-wrapper {
+		min-height: 785px;
+	}
+	body.page-age-verification .full-page-wrapper {
+		background: #fff url("../images/age-check-bg.jpg") no-repeat 50% 70px;
+	}
+#block-block-4 {
+	padding: 115px 0 0;
+	text-align: center;
+}
+	#block-block-4 p {
+		margin: 16px 0 0;
+		font-size: 22px;
+		font-weight: bold;
+		text-transform: uppercase;
+	}
+#tentensites-agechecker-form {
+	text-align: center;
+	background: #cb4f24 none;
+	color: #fff;
+	width: 485px;
+	margin: 24px auto;
+	padding: 45px 75px 35px;
+	-webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+	-moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+	box-shadow:  0 0 5px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+	#tentensites-agechecker-form .date-wrapper {
+		margin: 20px auto 25px;
+		width: 410px;
+	}
+		#tentensites-agechecker-form .date-wrapper .form-item {
+			float: left;
+			width: 134px;
+			position: relative;
+		}
+			#tentensites-agechecker-form .date-wrapper .form-item-tentensites-agechecker-verification-month {
+				padding: 0 4px;
+			}
+		#tentensites-agechecker-form .date-wrapper span.placeholder {
+			width: 128px;
+			line-height: 30px;
+			position: absolute;
+			left: 3px; top: 3px;
+		}
+			#tentensites-agechecker-form .date-wrapper span.placeholder,
+			#tentensites-agechecker-form .date-wrapper input {
+				font-size: 16px;
+				color: #b7b7b7;
+				text-transform: uppercase;
+				letter-spacing: 4px;
+			}
+				.wf-oswald-n4-active #tentensites-agechecker-form .date-wrapper span.placeholder,
+				.wf-oswald-n4-active #tentensites-agechecker-form .date-wrapper input {
+					font-family: 'Oswald', sans-serif;
+				}
+		#tentensites-agechecker-form .date-wrapper input {
+			display: block;
+			background: #fff;
+			height: 30px;
+			width: 128px;
+			text-align: center;
+			border: solid 3px #fff;
+			-webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+			-moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+			box-shadow:  0 0 5px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/
+		}
+			#tentensites-agechecker-form .date-wrapper .form-item:hover input,
+			#tentensites-agechecker-form .date-wrapper input:active,
+			#tentensites-agechecker-form .date-wrapper input:focus,
+			#tentensites-agechecker-form .date-wrapper .form-item:hover span.placeholder {
+				border-color: #ffcc00;
+				color: #333;
+			}
+		#tentensites-agechecker-form .date-wrapper label {
+			display: block;
+			line-height: 1em;
+			padding-top: 7px;
+			text-transform: uppercase;
+			color: #691e04;
+			font-size: 14px;
+			line-height: 1em;
+		}
+			.wf-oswald-n4-active #tentensites-agechecker-form .date-wrapper label {
+				font-family: 'Oswald', sans-serif;
+			}
+		#tentensites-agechecker-form .form-item-tentensites-agechecker-verification-remember {
+			margin: 25px auto 30px;
+			width: 410px; height: 40px;
+			text-align: left;
+			overflow: hidden;
+		}
+			#tentensites-agechecker-form .form-item-tentensites-agechecker-verification-remember .description {
+				font-style: italic;
+				color: #ffdd00;
+			}
+			#tentensites-agechecker-form .form-item-tentensites-agechecker-verification-remember.cool-checkbox input {
+				position: absolute;
+				left: -120px;
+			}
+			#tentensites-agechecker-form .form-item-tentensites-agechecker-verification-remember.cool-checkbox label,
+			#tentensites-agechecker-form .form-item-tentensites-agechecker-verification-remember.cool-checkbox .description{
+				margin-left: 35px;
+				display: block;
+			}
+			#tentensites-agechecker-form .form-item-tentensites-agechecker-verification-remember .cooler-checkbox {
+				float: left;
+				width: 27px; height: 26px;
+				background: #853012 none;
+				cursor: pointer;
+				margin-top: 4px;
+				-webkit-box-shadow: inset 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
+				-moz-box-shadow: inset 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
+				box-shadow: inset 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
+			}
+				#tentensites-agechecker-form .form-item-tentensites-agechecker-verification-remember .cooler-checkbox div {
+					height: 15px;
+					background: #fff;
+					display: none;
+				}
+	#tentensites-agechecker-form input#edit-submit {
+		display: block;
+		width: 410px;
+		margin: 0 auto;
+		background: #fff;
+		text-transform: uppercase;
+		text-align: center;
+		padding: 25px 0;
+		color: #6d1c00;
+		font-size: 26px;
+		line-height: 1em;
+		cursor: pointer;
+	}
+		.wf-oswald-n4-active #tentensites-agechecker-form input#edit-submit {
+			font-family: 'Oswald', sans-serif;
+		}

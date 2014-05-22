@@ -1,0 +1,726 @@
+<?php
+
+/**
+ * @file
+ * This is the main module file
+ *
+ * This module requires that a user's stated age during registration is at least that set by the administrator.
+ */
+
+/**
+ * Implementation of hook_init().
+ *
+ * If validate age for all pages is selected then we check a session variable
+ *
+ * @return nothing
+ */
+function validateage_init() {
+  global $user;
+  if (variable_get('validateage_age_pages', 0) && !in_array(arg(0), array('validateage', 'user')) && (array_pop(explode('/', $_SERVER['PHP_SELF'])) !== 'cron.php') && !variable_get('site_offline', 0)) {
+    $age = (isset($_SESSION['validateage'])) ? _validateage_get_age($_SESSION['validateage']) : 0;
+    if ($age >= variable_get('validateage_age', '18') || ($user->uid <> 0)) {
+      return;
+    }
+    elseif (variable_get('validateage_age_search_engines', 0)) {
+      $items = explode(",", variable_get('validateage_age_search_engine_list', ''));
+      foreach ($items as $bot) {
+        if (strpos($_SERVER['HTTP_USER_AGENT'], $bot)) {
+          if (variable_get('validateage_age_search_engines_log', 0)) {
+            watchdog('validateage', t('!bot bot detected', array('!bot' => $bot)));
+          }
+          return;
+        }
+      }
+    }
+    // not a bot or a validated user
+    drupal_goto('validateage', drupal_get_destination());
+  }
+  return;
+}
+
+/**
+ * Implementation of hook_help().
+ *
+ * Display help and module information
+
+ * @param string $path
+ *   Section of the site for which we're displaying help.
+ * @param string $arg
+ * @return string $output
+ *   Help text for section.
+ */
+function validateage_help($path, $arg) {
+  $output = '';
+  switch ($path) {
+    case "admin/help#validateage":
+      $output = '<p>Validates user as over an adminstrator set age when registering. Module requires that ';
+      $output .= 'a mandatory date field be created using the profile module. The name of that field and the ';
+      $output .= 'minimum age must be entered in the Minimum Registration Age settings.</p>';
+      break;
+  }
+  return $output;
+}
+
+/**
+ * Valid permissions for this module
+ *
+ * @return array $array
+ *   An array of valid permissions for the validateage module.
+ */
+function validateage_perm() {
+  return array('administer age validation', 'bypass age validation');
+
+}
+
+/**
+ * Implementation of hook_menu().
+ *
+ * @return array $items
+ *   Structured array of menu items.
+ */
+function validateage_menu() {
+  $path = drupal_get_path('module', 'validateage');
+  $items = array();
+  $items['admin/user/validateage'] = array(
+    'title' => t('Minimum Registration Age'),
+    'description' => t('Set the minimum age for user registration'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('validateage_admin'),
+    'access arguments' => array('administer age validation'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['validateage'] = array(
+    'title' => variable_get('validateage_page_title', t('Please Enter Your Age')),
+    'description' => t('!site is an age restricted site', array('!site' => variable_get('site_name', ''))),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('validateage_age_form'),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['validateage/autocomplete-node'] = array(
+    'page callback' => 'validateage_autocomplete_node',
+    'type' => MENU_CALLBACK,
+    'file' => 'validateage_autocomplete_node.inc',
+    'file path' => $path,
+    'access arguments' => array('administer age validation'),
+  );
+  $items['admin/user/validateage/callback/%'] = array(
+    'type' => MENU_CALLBACK,
+    'page callback' => 'validateage_buttonlabels_callback',
+    'page arguments' => array(4),
+    'access callback' => TRUE,
+  );
+  return $items;
+}
+/**
+ * Callback function for use with the ahah form elements menu callbacks.
+ *
+ * @param string $arg
+ *   Form wrapper to process
+ */
+function validateage_buttonlabels_callback($arg) {
+  $form_state = array('storage' => NULL, 'submitted' => FALSE);
+  $form_build_id = $_POST['form_build_id'];
+  $form = form_get_cache($form_build_id, $form_state);
+
+  $args = $form['#parameters'];
+  $form_id = array_shift($args);
+  $form_state['post'] = $form['#post'] = $_POST;
+  $form['#programmed'] = $form['#redirect'] = FALSE;
+
+  drupal_process_form($form_id, $form, $form_state);
+  $form = drupal_rebuild_form($form_id, $form_state, $args, $form_build_id);
+
+  $textfields = $form[$arg];
+  // clear out the messages so we don't see multiple on final submission
+  drupal_get_messages();
+  $output = drupal_render($textfields);
+
+  // Final rendering callback.
+  print drupal_json(array('status' => TRUE, 'data' => $output));
+  exit();
+}
+
+/**
+ * Implementation of hook_user().
+ *
+ * @global object $user
+ * @param string $op
+ * @param array $edit
+ * @param object $account
+ * @param string $category
+ * @return varies
+ */
+function validateage_user($op, &$edit, &$account, $category = NULL) {
+  global $user;
+  if (variable_get('validateage_age_registration', 0)) {
+    $input_source_id = variable_get('validateage_field_id', '0');
+    switch ($op) {
+      case 'delete':
+        switch ($input_source_id) {
+          case '0':
+            _validateage_birthday_delete($account->uid);
+            break;
+        }
+        break;
+      case 'insert':
+        switch ($input_source_id) {
+          case '0':
+            _validateage_birthday_update($account->uid, $edit['validateage_dob']['month'], $edit['validateage_dob']['day'], $edit['validateage_dob']['year']);
+            break;
+        }
+
+        break;
+      case 'register':
+        $form = array();
+        switch ($input_source_id) {
+          case '0':
+            $form['validateage_dob'] = _validateage_date_element();
+            break;
+        }
+        return $form;
+        break;
+      case 'validate':
+        if (user_access('bypass age validation', $user)) break;
+        switch ($input_source_id) {
+          case '0':
+            $fieldname = 'validateage_dob';
+            $fieldlabel = t('date of birth');
+            $birthyear = $edit['validateage_dob']['year'];
+            $birthmonth = $edit['validateage_dob']['month'];
+            $birthdate = $edit['validateage_dob']['day'];
+            break;
+          default:
+            list($type, $field) = explode(':', $input_source_id, 2);
+            switch ($type) {
+              case 'profile':
+                $field = db_fetch_object(db_query("SELECT * FROM {profile_fields} WHERE fid = %d", $field));
+                $fieldname = $field->name;
+                $fieldlabel = $field->title;
+                $birthyear = $edit[$fieldname]['year'];
+                $birthmonth = $edit[$fieldname]['month'];
+                $birthdate = $edit[$fieldname]['day'];
+                break;
+              case 'content_profile':
+                list($type, $field) = explode(':', $field);
+                $field = content_fields($field, $type);
+                $fieldname = $field['field_name'];
+                $fieldlabel = $field['widget']['label'];
+                $birthyear = date('Y', strtotime($edit[$fieldname][0]['value']));
+                $birthmonth = date('m', strtotime($edit[$fieldname][0]['value']));
+                $birthdate = date('d', strtotime($edit[$fieldname][0]['value']));
+                break;
+            }
+
+        }
+        $birthday = implode("-", array($birthyear, $birthmonth, $birthdate));
+        validateage_validate($birthday, $fieldlabel, $fieldname);
+        break;
+    }
+  }
+}
+
+/**
+ * Utility function to validate an inputted birthday in form submissions.
+ *
+ * @param string $birthday
+ *   Birthdate formatted as YYYY-MM-DD.
+ */
+function validateage_validate($birthday, $fieldlabel, $fieldname = NULL) {
+  $age = _validateage_get_age($birthday);
+  $minimum_age = variable_get('validateage_age', '18');
+  $fieldlabel = ($fieldname) ? $fieldlabel : t('date of birth');
+
+  if ($age < $minimum_age) {
+    if ($age > 0) {
+      $error = t(variable_get('validateage_fail_message', 'You must be at least @age to join @site.'), array('@age' => variable_get('validateage_age', 18), '@site' => variable_get('site_name', '')));
+      watchdog('validateage', t('An underage user attempted to enter the site. Entered birthday was @birthday.', array('@birthday' => $birthmonth . '/' . $birthdate . '/' . $birthyear)));
+    }
+    else $error = t('Please enter your @label!', array('@label' => $fieldlabel));
+    
+    if ($fieldname) form_set_error($fieldname, $error);
+    else drupal_set_message($error, 'error');
+  }
+  elseif (arg(0) != 'user') {
+    if (_validateage_check_birthday($birthday))
+      drupal_set_message(t('Happy Birthday!'), 'warning');
+    $_SESSION['validateage'] = $birthday;
+  }
+}
+
+/**
+ * This function defines the settings on the admin page.
+ *
+ * @param array $form_state
+ * @return array
+ */
+function validateage_admin(&$form_state) {
+  drupal_add_js('misc/autocomplete.js'); // load up the autocomplete.js since the ahah call later may not load it
+  /* General Settings */
+  $form['general'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('General Settings')
+  );
+  $form['general']['validateage_age'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Age'),
+    '#default_value' => variable_get('validateage_age', '18'),
+    '#size' => 3,
+    '#maxlength' => 3,
+    '#description' => t('The minimum age required to register for the site.'),
+    '#element_validate' => array('validateage_is_number'),
+  );
+  $form['general']['validateage_age_message'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Validate Age Message'),
+    '#default_value' => variable_get('validateage_age_message', 'You must be at least @age to enter @site'),
+    '#description' => t('The message displayed if the user is underage.'),
+    '#size' => 120,
+  );
+
+  /* Registration Options */
+  $form['registration'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Registration Options')
+  );
+  $form['registration']['validateage_age_registration'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Registration Validation'),
+    '#default_value' => variable_get('validateage_age_registration', 0),
+    '#description' => t('Enable age validation for users on registration'),
+  );
+  // allow admins to choose whether to use an existing profile module field for birthday
+  // or have it stored by validateage
+  $options = array();
+  if (module_exists('profile')) {
+    // Get fields from the profile.module of the type 'date'.
+    $result = db_query("SELECT fid, title FROM {profile_fields} WHERE type = 'date'");
+    while ($field = db_fetch_object($result)) {
+      $options['Profile']['profile:' . $field->fid] = $field->title;
+    }
+  }
+  if (module_exists('content_profile')) {
+    // Get date fields from the profile content types.
+    $types = content_profile_get_types();
+    foreach ($types as $type) {
+      $fields = content_types($type->type);
+      foreach ($fields['fields'] as $field) {
+        if ($field['type'] == 'date') {
+          $options['Content Profile']['content_profile:' . $type->type . ':' . $field['field_name']] = $type->name . ': ' . $field['widget']['label'];
+        }
+      }
+    }
+  }
+  if (!empty($options)) {
+    $options = array('independent input field') + $options;
+    $form['registration']['validateage_field_id'] = array(
+      '#type' => 'select',
+      '#title' => t('Date of birth source'),
+      '#default_value' => variable_get('validateage_field_id', NULL),
+      '#description' => t("Select whether an independent input field shall be created or otherwise which profile field of type 'date' you want to use as date of birth. Note that the independent field is only shown to the user upon registration."),
+      '#options' => $options,
+      '#required' => TRUE,
+      '#element_validate' => array('validateage_admin_profile_visibility'),
+    );
+  }
+  $form['registration']['validateage_fail_message'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Validation Failure Message'),
+    '#default_value' => variable_get('validateage_fail_message', 'You must be at least @age to join @site.'),
+    '#description' => t('The message displayed if the user is underage.'),
+  );
+
+  /* Page Options */
+  $form['pages'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Page Options')
+  );
+  $form['pages']['validateage_age_pages'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Page Validation'),
+    '#default_value' => variable_get('validateage_age_pages', 0),
+    '#description' => t('Enable age validation for any page on this site'),
+  );
+  $form['pages']['validateage_page_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Page Title'),
+    '#description' => t('The title to use for the age validation page, if unspecified the default title of "%s" will be used.', array('%s' => t('Please Enter Your Age'))),
+    '#default_value' => variable_get('validateage_page_title', ''),
+  );
+  $form['pages']['validateage_node_use'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use a node for the age validation page'),
+    '#default_value' => variable_get('validateage_node_use', 0),
+    '#description' => t('If checked you can specify a node to show on the age validation page.'),
+    '#ahah' => array(
+      'path' => 'admin/user/validateage/callback/nodedetails',
+      'wrapper' => 'nodedetails',
+      'effect' => 'fade',
+    )
+  );
+  $form['pages']['nodedetails'] = array(
+    '#prefix' => '<div id="nodedetails">',
+    '#suffix' => '</div>',
+    '#type' => 'fieldset',
+    '#title' => t('Node Details'),
+    '#attributes' => (variable_get('validateage_node_use', 0) === 1) ? array() : array('style' => 'display:none;')
+  );
+  if (variable_get('validateage_node_use', 0) === 1) {
+    $temp = $form['pages']['nodedetails'];
+    $temp['validateage_node_nid'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Node to show in the age validation page'),
+      '#autocomplete_path' => 'validateage/autocomplete-node',
+      '#description' => t('Type the title or the node ID of the node you would like to use in the age validation page and select it from the dropdown.'),
+      '#default_value' => (is_numeric(variable_get('validateage_node_nid', ''))) ? _validateage_nid2str(variable_get('validateage_node_nid', '')) : '',
+    );
+    if ($form_state['values']) $form['nodedetails'] = $temp;
+    else $form['pages']['nodedetails'] = $temp;
+  }
+  $form['pages']['validateage_buttons_use'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use buttons for the age validation'),
+    '#default_value' => variable_get('validateage_buttons_use', 0),
+    '#description' => t('If checked user will see two buttons ("Agree" & "Disagree") instead of a date widget.  Note that the true birthdate of the user will not be collected when using this option.'),
+    '#ahah' => array(
+      'path' => 'admin/user/validateage/callback/buttonlabels',
+      'wrapper' => 'buttonlabels',
+      'effect' => 'fade',
+    )
+  );
+  $form['pages']['buttonlabels'] = array(
+    '#prefix' => '<div id="buttonlabels">',
+    '#suffix' => '</div>',
+    '#type' => 'fieldset',
+    '#title' => t('Button Labels'),
+    '#attributes' => (variable_get('validateage_buttons_use', 0) === 1) ? array() : array('style' => 'display:none;')
+  );
+  if (variable_get('validateage_buttons_use', 0) === 1) {
+    $temp = $form['pages']['buttonlabels'];
+    $temp['validateage_buttons_text_agree'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text to use for the "Agree" button'),
+      '#default_value' => variable_get('validate_age_buttons_text_agree', t('Agree'))
+    );
+    $temp['validateage_buttons_text_disagree'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text to use for the "Disagree" button'),
+      '#default_value' => variable_get('validate_age_buttons_text_disagree', t('Disagree'))
+    );
+    if ($form_state['values']) $form['buttonlabels'] = $temp;
+    else $form['pages']['buttonlabels'] = $temp;
+  }
+  $form['pages']['validateage_age_search_engines'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Allow Search Engines'),
+    '#default_value' => variable_get('validateage_age_search_engines', 0),
+    '#description' => t('Allow search engines past the page validation so they can index your site'),
+  );
+  $items = implode(",", _validateage_get_botlist());
+  $form['pages']['validateage_age_search_engine_list'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Search Engines'),
+    '#default_value' => variable_get('validateage_age_search_engine_list', $items),
+    '#description' => t('A list of search engines to allow. Separate by a comma and no space.'),
+  );
+  $form['pages']['validateage_age_search_engines_log'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Log Search Engine Activity'),
+    '#default_value' => variable_get('validateage_age_search_engines_log', 0),
+    '#description' => t('Log search engine activity. Note: only bother ticking this if you allow search engines past the page validation.'),
+  );
+  // add in an extra submission function to do some string alterations
+  $form['#submit'][] = 'validateage_admin_submit';
+  return system_settings_form($form);
+}
+
+/**
+ * Runs additional processing on the form values upon submission
+ *
+ * @param array $form
+ *   Original structured drupal form array.
+ * @param array $form_state
+ *   Holds the values from the form upon submission.
+ */
+function validateage_admin_submit($form, &$form_state) {
+  if (isset($form_state['values']['validateage_node_nid'])) $form_state['values']['validateage_node_nid'] = _validateage_str2nid($form_state['values']['validateage_node_nid']);
+}
+
+/**
+ * Check if profile field is visible or not.
+ *
+ * @param array $form
+ *   Structured drupal form array.
+ */
+function validateage_admin_profile_visibility(&$form) {
+  // check if profile field is visible or not
+   if ($form['#value']) {
+    list($type, $field) = explode(':', $form['#value'], 2);
+    switch ($type) {
+      case 'profile':
+        // Check if profile field is visible or not
+        $object = db_fetch_object(db_query("SELECT * FROM {profile_fields} WHERE fid = %d", $field));
+        if (!$object->register) {
+          form_set_error('validateage_field_id', t('Your chosen profile field must be set to be visible on registration form for age validation to work. Please modify its settings !here before continuing.', array('!here' => l('here', 'admin/user/profile/edit/' . $form['#edit']))));
+        }
+        break;
+      case 'content_profile':
+        // Check if the content_profile field is visible on the registration form or not
+        list($type, $field) = explode(':', $field);
+        $field = content_fields($field, $type);
+        $settings = content_profile_get_settings($type);
+        if (!$settings['registration_use']) {
+          form_set_error('validateage_field_id', t('The !type content type has to be set to be used on the registration form for age validation to work. Please modify its settings !here before continuing.', array('!type' => $type, '!here' => l('here', "admin/content/node-type/$type/profile"))));
+        }
+        elseif (!$field['required'] && array_search('other', $settings['registration_hide']) !== FALSE) {
+          form_set_error('validateage_field_id', t('The !field field has to be set to be used on the registration form for age validation to work. Please modify its settings !here before continuing.', array('!field' => $field['field_name'], '!here' => l('here', "admin/content/node-type/$type/profile"))));
+        }
+        break;
+    }
+  }
+}
+
+/**
+ * Validation for the age field in the settings form.
+ *
+ * @param array $form
+ *   Structured drupal form array.
+ */
+function validateage_is_number(&$form) {
+  if (!is_numeric($form['#value'])) {
+    form_set_error("validateage", t('Age is not a number.'));
+  }
+  elseif ($form['#value'] < 0) {
+    form_set_error("validateage", t('Age must be 0 or greater.'));
+  }
+}
+
+/**
+ * Utility function to delete a birthday record from the db.
+ *
+ * @param integer $uid
+ *   A valid user ID number.
+ */
+function _validateage_birthday_delete($uid) {
+  $query = "DELETE FROM {validateage} WHERE uid = %d";
+  $args = array($uid);
+  db_query($query, $args);
+}
+
+/**
+ * Utility function to update a birthday record in the db.
+ * @param integer $uid
+ *   A valid user ID number.
+ * @param integer $month
+ * @param integer $day
+ * @param integer $year
+ */
+function _validateage_birthday_update($uid, $month, $day, $year) {
+  $query = "SELECT COUNT(*) FROM {validateage} WHERE uid = %d";
+  $args = array($uid);
+  // check if there's a record for user already
+  if (db_result(db_query($query, $args))) {
+    $query = "UPDATE {validateage} SET month = %d, $day = %d, $year = %d WHERE uid = %d";
+    $args = array($month, $day, $year, $uid);
+  }
+  else {
+    $query = "INSERT INTO {validateage} (uid, month, day, year) VALUES (%d, %d, %d, %d)";
+    $args = array($uid, $month, $day, $year);
+  }
+  db_query($query, $args);
+}
+
+/**
+ * Utility function to calculate a user's age.
+ *
+ * @param string $birthday
+ * @return integer
+ *   The user's age
+ */
+function _validateage_get_age($birthday) {
+  list($year, $month, $day) = explode("-", $birthday);
+  $year_diff  = date("Y") - $year;
+  $month_diff = date("m") - $month;
+  $day_diff   = date("d") - $day;
+  if ($month_diff < 0) {
+    $year_diff--;
+  }
+  elseif (($month_diff==0) && ($day_diff < 0)) {
+    $year_diff--;
+  }
+  return $year_diff;
+}
+
+/**
+ * Utility function to determine whether it is a user's birthday or not.
+ *
+ * @param string $birthday
+ * @return integer
+ *   It is the users birthday if it returns 1
+ */
+function _validateage_check_birthday($birthday) {
+  list($year, $month, $day) = explode("-", $birthday);
+  if ((date("m") == $month) && (date("d") == $day)) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+/**
+ * Utility function used as callback to the after_build in the age form.
+ *
+ * @param array $form_element
+ * @param array $form_values
+ * @return array
+ *   Associative array of options for the form element.
+ */
+function validateage_set_year_range($form_element, $form_values) {
+  $start_year = date('Y') - 100;
+  $end_year = date('Y');
+  $form_element['year']['#options'] = drupal_map_assoc(range($start_year, $end_year));
+  return $form_element;
+}
+
+function _validateage_date_element() {
+  $defaults = array();
+  if (isset($_SESSION['validateage'])) {
+    list($year, $month, $day) = explode("-", $_SESSION['validateage']);
+    $defaults = array(
+      'day' => $day,
+      'month' => $month,
+      'year' => $year,
+    );
+  }
+  return array(
+    '#type' => 'date',
+    '#title' => t('Date of Birth'),
+    '#description' => t(variable_get('validateage_age_message', 'You must be at least @age to enter @site'), array('@age' => variable_get('validateage_age', 18), '@site' => variable_get('site_name', ''))),
+    '#after_build' => array('validateage_set_year_range'),
+    '#default_value' => $defaults,
+  );
+}
+
+/**
+ * Content of the age validation page.  Note that there is a page.tpl file to
+ * accompany this in order to avoid showing content to unvalidated users.
+ * @see README.txt
+ *
+ * @return array
+ *   A structured drupal form array.
+ */
+function validateage_age_form() {
+  // if a node is going to be used in the page, load it up and display here
+  if (variable_get('validateage_node_use', 0) === 1) {
+    $form['node'] = array(
+      '#type' => 'markup',
+      '#value' => is_numeric(variable_get('validateage_node_nid', '')) ? node_view(node_load(1)) : ''
+    );
+  }
+  // if buttons are not being used show the standard date widget
+  if (variable_get('validateage_buttons_use', 0) === 0) {
+    $form['validateage_dob'] = _validateage_date_element();
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Submit')
+    );
+  }
+  // use agree/disagree buttons instead of a widget
+  else {
+    $form['validateage_dob'] = array(
+      '#type' => 'date',
+      '#default_value' => array('year' => date("Y") - variable_get('validateage_age', 18), 'month' => date("n"), 'day' => date("j") - 1),
+      '#attributes' => array('style' => 'display:none;'),
+      '#prefix' => '<div style="display:none;">',
+      '#suffix' => '</div>'
+    );
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => variable_get('validate_age_buttons_text_agree', t('Agree'))
+    );
+    $form['disagree'] = array(
+      '#type' => 'submit',
+      '#value' => variable_get('validate_age_buttons_text_disagree', t('Disagree'))
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implementation of FORM_submit().
+ *
+ * @param array $form
+ * @param array $form_state
+ */
+function validateage_age_form_submit($form, $form_state) {
+  $birthyear = $form_state['values']['validateage_dob']['year'];
+  $birthmonth = $form_state['values']['validateage_dob']['month'];
+  $birthdate = $form_state['values']['validateage_dob']['day'];
+  $birthday = implode("-", array($birthyear, $birthmonth, $birthdate));
+  validateage_validate($birthday, 1);
+}
+
+/**
+ * Utility function to return an array of the default search engine bots.
+ *
+ * @return array
+ *   Array of some known search engine bots.
+ */
+function _validateage_get_botlist() {
+  $botlist = array(
+    "Teoma",
+    "alexa",
+    "froogle",
+    "inktomi",
+    "looksmart",
+    "URL_Spider_SQL",
+    "Firefly",
+    "NationalDirectory",
+    "Ask Jeeves",
+    "TECNOSEEK",
+    "InfoSeek",
+    "WebFindBot",
+    "girafabot",
+    "crawler",
+    "www.galaxy.com",
+    "Googlebot",
+    "Scooter",
+    "Slurp",
+    "appie",
+    "FAST",
+    "WebBug",
+    "Spade",
+    "ZyBorg",
+    "rabaz",
+  );
+  return $botlist;
+}
+
+/**
+ * Utility function to convert the string in node fields into a simple node id.
+ *
+ * @param string $str
+ *   (required) The string to process.
+ *
+ * @return integer $nid
+ *   The node's id.
+ */
+function _validateage_str2nid($str) {
+  return $nid = substr($str, (strrpos($str, '[') + 1), -1);
+}
+
+/**
+ * Utility function to convert a node id into the format of 'Title [nid]'.
+ *
+ * @param integer $nid
+ *   (required) The nid to process.
+ *
+ * @return string $str
+ *   The formatted string in form of 'Title [nid]'.
+ */
+function _validateage_nid2str($nid) {
+  $arr = db_fetch_array(db_query("SELECT title FROM {node} WHERE nid = %d LIMIT 1", $nid));
+  $title = $arr['title'];
+  return $str = $title . ' [' . $nid . ']';
+}

@@ -1,0 +1,10 @@
+name = Validate Age
+description = Checks to see that users are over a certain age
+core = 6.x
+
+; Information added by drupal.org packaging script on 2011-09-27
+version = "6.x-1.1"
+core = "6.x"
+project = "validateage"
+datestamp = "1317147707"
+

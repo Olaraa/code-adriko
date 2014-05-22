@@ -1,0 +1,4 @@
+name = "Ten Ten Sites Module"
+description = "A sitewide module for Ten Ten site functionality"
+package = "Ten Ten Sites"
+core = "7.x"

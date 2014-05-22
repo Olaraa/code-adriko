@@ -1,0 +1,109 @@
+<?php
+
+global $tenten_data;
+$tenten_data['body_classes'] = array();
+$tenten_data['empty_callbacks'] = array (
+	array( 'url'=>'welcome', 'title'=>'Welcome', 'description'=>'Welcome' ),
+);
+
+/**
+ * implement hook_menu
+ */
+function tentensites_menu() {
+	global $tenten_data;
+	$items = array();
+	foreach ($tenten_data['empty_callbacks'] as $callback) {
+		$items[$callback['url']] = array (
+			'title' => $callback['title'],
+			'description' => $callback['description'],
+			'page callback' => 'tentensites_empty_content',
+			'access arguments' => array('access content'),
+			'type' => MENU_CALLBACK
+		);
+	}
+	return $items;
+}
+
+
+/**
+ * return empty content
+ */
+function tentensites_empty_content() {
+	return '';
+}
+
+/**
+ * preprocess page
+ */
+function tentensites_preprocess_html(&$vars) {
+	global $tenten_data;
+	foreach ($tenten_data['body_classes'] as $body_class) {
+		$vars['classes_array'][] = $body_class;
+	}
+}
+
+/**
+ * modify views
+ */
+function tentensites_views_pre_render(&$view) {
+	global $tenten_data;
+	
+	//add a views class to the body
+	if (strpos($view->current_display, 'page')!==false) {
+		$tenten_data['body_classes'][] = 'views-'.$view->name.'-'.$view->current_display;
+	}
+}
+
+/**
+ * modify administration menu
+ * see: http://drupal.org/node/502500 for details: #13 and #149
+ */
+function tentensites_admin_menu_output_alter(&$content) {
+  // Add a top level item for the Create content menu itself.
+  $content['tentensites'] = array(
+    '#theme' => 'admin_menu_links',
+    '#weight' => -99,
+    '#sorted' => TRUE,
+  );
+
+  // Copy the create content submenu to our backend menu.
+  $content['tentensites']['create-content'] = array(
+    '#title' => t('Create content'),
+    '#href' => 'node/add',
+    '#weight' => -10,
+  );
+
+  foreach (node_type_get_types() as $type => $object) {
+    if (node_access('create', $type)) {
+      $node_type_url = str_replace('_', '-', $type);
+      $content['tentensites']['create-content'][$node_type_url] = array (
+        '#title' => $object->name,
+        '#href' => 'node/add/'. $node_type_url,
+      );
+    }
+  }
+	
+	// Remove "Tasks" and "Index" from Admin Menu output
+  $admin_menu_exclusions = array(
+    t('Tasks'),
+  );
+	
+	foreach($content['menu'] as $menu_key => $menu_tree) {
+    if (in_array($menu_tree['#title'], $admin_menu_exclusions))
+      unset($content['menu'][$menu_key]);
+  }
+	
+	//sort create content links
+  if (!empty($content['tentensites']['create-content'])) {
+    uasort($content['tentensites']['create-content'], '_tentensites_element_sort');
+  }
+}
+
+/**
+ * sorter: mainly for admin links
+ */
+function _tentensites_element_sort($a, $b) {
+  $a_title = (is_array($a) && isset($a['#title'])) ? $a['#title'] : '';
+  $b_title = (is_array($b) && isset($b['#title'])) ? $b['#title'] : '';
+  return strcasecmp($a_title, $b_title);
+}

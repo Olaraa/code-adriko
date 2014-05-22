@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * install variable
+ */
+function tentensites_agechecker_install() {
+	variable_set('tentensites_agechecker_paths', array());
+	variable_set('tentensites_agechecker_node_types', array());
+	variable_set('tentensites_agechecker_intro', 'Due to our strict policy against underage consumption of alcohol, you need to prove that you are of legal consumption age. Enter your birthday below so you may continue to your page.');
+}
+
+/**
+ * uninstall module
+ */
+function tentensites_agechecker_uninstall() {
+	variable_del('tentensites_agechecker_paths');
+	variable_del('tentensites_agechecker_node_types');
+	variable_del('tentensites_agechecker_intro');
+	variable_del('tentsites_agechecker_intro');
+}

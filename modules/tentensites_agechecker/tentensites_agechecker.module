@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * implement hook_menu
+ */
+function tentensites_agechecker_menu() {
+	$items = array();
+	
+	//this goes to the form during page viewing
+	$items['age-verification'] = array (
+		'title' => 'Please verify your age to continue',
+		'description' => 'Due to our strict stance against underage alcohol consumption, some pages of this website are limited only to the legal age for alcohol consumption. Please verify your age.',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('tenten_age_verification'),
+		'access arguments' => array('access content'),
+		'type' => MENU_CALLBACK,
+		'file' => 'tentensites_agechecker.admin.inc',
+	);
+	
+	//this goes to the settings form
+	$items['admin/config/content/age-verification-settings'] = array (
+		'title'	=> 'Age Verification Settings',
+		'description' => 'List out the paths and content types that require age verification',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('tentensites_agechecker_admin_settings'),
+		'access arguments' => array('administer site configuration'),
+		'type' => MENU_NORMAL_ITEM,
+		'file' => 'tentensites_agechecker.admin.inc',
+	);
+	
+	return $items;
+}
+
+/**
+ * hook into INIT
+ */
+function tentensites_agechecker_init() {
+	//unset($_SESSION['tentensites_agechecker_validated']);
+	//unset($_SESSION['tentensites_agechecker_redirect']);
+	if (!is_crawler()) {
+		if (isset($_SESSION['tentensites_agechecker_validated'])) {
+			echo "user has a session: ".$_SESSION['tentensites_agechecker_validated']."<br>";
+		} else echo "user has no session<br>";
+		if (isset($_COOKIE["tentensites_agechecker_validated_adriko"])) {
+			echo "user has a cookie: ".$_COOKIE["tentensites_agechecker_validated_adriko"]."<br>";
+		} else echo "user has no cookie<br>";
+		
+		$user_has_verified_session = (isset($_SESSION['tentensites_agechecker_validated']) && $_SESSION['tentensites_agechecker_validated']==true);
+		$user_has_verified_cookie = isset($_COOKIE["tentensites_agechecker_validated_adriko"]);
+		if (!($user_has_verified_session || $user_has_verified_cookie)) { // only run this block if NOT (user has a verified session OR user has verified cookie)
+			//paths
+			$redirect_path_str = variable_get('tentensites_agechecker_paths');
+			$redirect_paths = array();
+			if (!ctype_space($redirect_path_str)) {
+				$redirect_paths = explode("\r\n", $redirect_path_str);
+			}
+			
+			//types
+			$redirect_types_arr = variable_get('tentensites_agechecker_node_types');
+			$redirect_types = array();
+			foreach ($redirect_types_arr as $key=>$value) {
+				if ($value!==0) {
+					array_push($redirect_types, $value);
+				}
+			}
+			
+			//current query
+			$check_paths = array($_GET['q'], drupal_get_path_alias($_GET['q']));
+			$check_node_type = '';
+			$current_path_parts = explode("/", $_GET['q']);
+			if ($current_path_parts[0]=='node') {
+				$node = node_load($current_path_parts[1]);
+				$check_node_type = $node->type;
+			}
+			
+			$redirect = in_array($check_node_type, $redirect_types); //check node type
+			if (!$redirect) {
+				foreach ($check_paths as $check_path) {
+					if (in_array($check_path, $redirect_paths)) {
+						$redirect = true;
+						break;
+					}
+				}
+			}
+			
+			if ($redirect) {
+				$_SESSION['tentensites_agechecker_redirect'] = drupal_get_destination();
+				drupal_goto('age-verification');
+			}
+		}
+	}
+}
+
+
+/**
+ * handle theming
+ */
+function tentensites_agechecker_theme() {
+	return array (
+		'tenten_age_verification' => array (
+			'render element'	=>	'form',
+			'template'				=>	'tentensites-agechecker-form',
+		),
+	);
+}
+
+
+/**
+ * provide correct variables to template
+ */
+function template_preprocess_tenten_age_verification(&$vars) {
+	//dsm($vars);
+	$vars['tentensites_agechecker_intro'] = variable_get('tentensites_agechecker_intro');
+	$vars['tentensites_agechecker_verification'] = array();
+	$hidden = array();
+	
+	//key out variables for themer by key
+	foreach (element_children($vars['form']) as $key) {
+		$type = $vars['form'][$key]['#type'];
+		if ($type=='hidden' || $type=='token') {
+			$hidden[] = drupal_render($vars['form'][$key]);
+		} else {
+			$vars['tentensites_agechecker_verification'][$key] = drupal_render($vars['form'][$key]);
+		}
+	}
+	
+	//hidden elements don't need to be split
+	$vars['tentensites_agechecker_verification']['hidden'] = implode($hidden);
+	$vars['tentensites_agechecker_verification_full_form'] = implode($vars['tentensites_agechecker_verification']);
+	
+	//echo '<pre>';print_r($vars);echo '</pre>';
+}
+
+
+/**
+ * check if crawler
+ */
+function is_crawler() {
+	$user_agent = $_SERVER['HTTP_USER_AGENT'];
+	$crawlers='AbachoBOT|accoona|AcioRobot|AdsBot-Google|AltaVista|ASPSeek|Baidu|Charlotte|Charlotte t|CocoCrawler|DotBot|Dumbot|eStyle|FeedFetcher-Google|GeonaBot|Gigabot|Google|Googlebot|IDBot|Java VM|LiteFinder|Lycos|msnbot|msnbot-media|MSRBOT|QihooBot|Rambler|Scooter|ScrubbyBloglines subscriber|Sogou head spider|Sogou web spider|Sosospider|Superdownloads Spiderman|WebAlta Crawler|Yahoo|Yahoo! Slurp China|Yeti|YoudaoBot|';
+	//$is_crawler = (preg_match("/$crawlers/i", $user_agent) > 0); // 1 million reps = 15.2711 secs
+	$is_crawler = ((stripos($crawlers, $user_agent) !== false) ? true : false); // 1 million reps = 13.9157 secs
+	return $is_crawler;
+}

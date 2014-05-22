@@ -1,0 +1,1170 @@
+body {
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 0.8em;
+	line-height: 1.6em;
+	margin: 0;
+	padding: 0;
+	color: #333;
+	background: #fff none;
+}
+	.wf-opensans-n4-active body {
+		font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+	}
+	body.not-front {
+		background: #fcfbfa;
+	}
+	body.maintenance-page {
+	  background: #ccc;
+	}
+	body.page-user-login {
+		background: #E6E7EB none;
+		font-size: 1.3em;
+		line-height: 2em;
+	}
+.messages-wrapper {
+	margin: 24px 0;
+}
+.messages {
+	padding: 12px;
+	border: solid 1px #000;
+	margin: 12px 0;
+	background: #fff none;
+}
+	.status {
+		border-color: #C7F2C8;
+		color: #33A333;
+	}
+	div.error {
+		background-color: #FCC;
+		border: solid 2px #D77;
+	}
+a {
+	text-decoration: none;
+	color: #1f75cc;
+	outline: none;
+}
+	a:hover {
+	}
+table {
+	width: 100%;
+}
+a.colorbox-insert-image {
+	display: block;
+}
+	a.colorbox-insert-image img {
+		display: block;
+	}
+	a.colorbox-insert-image span.colorbox-insert-image-caption {
+		display: block;
+		text-align: center;
+		padding-top: 0.8em;
+	}
+#admin-menu-wrapper {
+	overflow: visible;
+}
+.centred-strip {
+	width: 960px;
+	margin: 0 auto;
+	padding: 0 10px;
+}
+.tabs {
+	margin: 12px 0;
+}
+	.tabs ul.primary li a {
+		padding: 6px 9px;
+	}
+
+
+
+/*** h1 *******************************************************************************************************/
+h1,
+h2.shadowed {
+	font-size: 62px;
+	line-height: 1em;
+	text-transform: capitalize;
+	text-align: center;
+	color: #000;
+	position: relative;
+}
+	body.page-age-verification h2.shadowed {
+		color: #fff;
+	}
+	.wf-lobster-n4-active h1,
+	.wf-lobster-n4-active h2.shadowed {
+		font-family: "Lobster", cursive;
+	}
+	h1 span,
+	h2.shadowed span {
+		display: block;
+		position: relative;
+		z-index: 10;
+	}
+		h1 span.shadow,
+		h2.shadowed span.shadow {
+			color: #fadf75;
+			margin-top: -62px;
+			padding: 5px 0 0 5px;
+			z-index: 1;
+		}
+			body.page-age-verification h2.shadowed span.shadow {
+				color: #000;
+			}
+.h1-wrapper {
+	padding-top: 62px;
+}
+	body.no-h1 .h1-wrapper {
+		position: absolute !important;
+		clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+		clip: rect(1px, 1px, 1px, 1px);
+	}
+
+
+
+/*** maintenance page css ************************************************************************************/
+.maintenance-page #page-wrapper {
+}
+.maintenance-page #page {
+	margin: 40px auto 0;
+	background: #fff;
+	width: 80%;
+	padding: 36px;
+	border: solid 12px #ddd;
+}
+.maintenance-page h1 {
+	color: #333;
+	text-transform: none;
+}
+
+
+/*** page user login *******************************************************************************************************/
+body.page-user-login #page-wrapper {
+	width: 450px;
+	margin: 70px auto 0;
+	padding: 72px;
+	background: #fff none;
+	border: solid 12px #ddd;
+}
+body.page-user-login #page-wrapper .form-item label {
+	font-weight: normal;
+}
+body.page-user-login #page-wrapper .form-item .description {
+	font-size: 60%;
+	line-height: 1em;
+	padding: 12px 0 0;
+	font-style: italic;
+}
+body.page-user-login #page-wrapper input.form-text {
+	padding: 8px;
+	border: solid 3px #ccc;
+	font-size: 0.7em;
+	width: 428px;
+}
+body.page-user-login #page-wrapper input.form-submit {
+	padding: 12px 24px;
+	background: #333;
+	color: #fff;
+	font-size: 1em;
+	border: none;
+}
+
+
+/*** inner page strip bg ****************************************************************************/
+.inner-page-pic-strip {
+	background: #2a2a2a url(../images/adriko-noise.jpg);
+}
+	.inner-page-pic-strip div {
+		height: 53px;
+		background: url(../images/adriko-nav-pic.png) no-repeat center top;
+	}
+
+
+/*** navigation ************************************************************************************/
+.nav-wrapper {
+	background: #ebebeb;
+	position: relative;
+	z-index: 10;
+	-webkit-box-shadow: 0px 2px 2px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+	-moz-box-shadow: 0px 2px 2px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+	box-shadow:  0px 2px 2px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/	
+}
+body.front .nav-wrapper {
+	background: #fff;
+}
+	.nav {
+		position: relative;
+		height: 70px;
+	}
+	.nav-wrapper .logo {
+		position: absolute;
+		left: 0; top: 0;
+		width: 233px; height: 109px;
+	}
+		.nav-wrapper .logo a {
+			display: block;
+			width: 233px; height: 109px;
+			background: url(../images/adriko-home-logo.png) no-repeat 0 0;
+		}
+	.nav-wrapper .menu-social-media {
+	}
+	.nav-wrapper .social-media-links {
+		height: 30px;
+		padding-bottom: 10px;
+	}
+		.nav-wrapper .social-media-links ul {
+			overflow: hidden;
+		}
+		.nav-wrapper .social-media-links li {
+			float: right;
+			width: 26px;
+		}
+			.nav-wrapper .social-media-links a {
+				float: left;
+				width: 26px; height: 30px;
+				background: url(../images/adriko-social-media.jpg) no-repeat -28px 0;
+			}
+			body.front .nav-wrapper .social-media-links a {
+				background: url(../images/adriko-social-media-front.jpg) no-repeat -28px 0;
+			}
+			.nav-wrapper .social-media-links li.twitter a:hover {
+				background-position: -84px 0;
+			}
+		.nav-wrapper .social-media-links li.fb {
+			padding-right: 2px;
+		}
+			.nav-wrapper .social-media-links li.fb a {
+				background-position-x: 0;
+			}
+			.nav-wrapper .social-media-links li.fb a:hover {
+				background-position: -56px 0;
+			}
+	.nav-wrapper ul.main-menu {
+		display: block;
+		width: 710px;
+		float: right;
+		clear: both;
+	}
+		.nav-wrapper .main-menu li {
+			float: right;
+			padding-right: 30px;
+		}
+			.nav-wrapper .main-menu li.first {
+				padding-right: 0;
+			}
+		.nav-wrapper .main-menu a {
+			color: #333;
+			text-transform: uppercase;
+			line-height: 1em;
+			font-size: 1.2em;
+		}
+			.wf-oswald-n4-active .nav-wrapper .main-menu a {
+				font-family: 'Oswald', sans-serif;
+			}
+		.nav-wrapper .main-menu a:hover,
+		.nav-wrapper .main-menu li.active a {
+			color: #cb4f24;
+			border-bottom: 2px solid #ff7e00;
+		}
+
+
+
+/*** footer ************************************************************************************/
+body.front .footer-wrapper {
+	position: relative;
+	z-index: 10;
+}
+#footer {
+	background: #e36500 url(../images/adriko-footer-background.jpg) repeat;
+	padding-bottom: 170px;
+}
+	#footer .intro {
+		padding: 54px 0 32px;
+		text-align: center;
+	}
+		#footer .intro .intro-1 {
+			font-size: 2.35em;
+			line-height: 30px;
+			color: #fff;
+		}
+			.wf-oswald-n4-active #footer .intro .intro-1 {
+				font-family: 'Oswald', sans-serif;
+			}
+		#footer .intro .intro-2 {
+			padding-top: 6px;
+			color: #613200;
+			font-size: 1.25em;
+			line-height: 16px;
+		}
+	.map-wrapper {
+		border: solid 6px #fff;
+	}
+		#adriko-map {
+			height: 270px;
+			background: #ccc;
+			-webkit-box-shadow: inset -2px 0 5px 0 rgba(0, 0, 0, 0.1); /** webkit **/
+			-moz-box-shadow: inset -2px 0 5px 0 rgba(0, 0, 0, 0.1); /** mozilla **/
+			box-shadow: inset -2px 0 5px 0 rgba(0, 0, 0, 0.1); /** pure css3 **/					
+		}
+			.wf-oswald-n4-active #adriko-map {
+				font-family: 'Oswald', sans-serif;
+			}
+		.map-link a {
+			display: block;
+			background: #fff;
+			width: 293px;
+			margin: 0 auto;
+			text-align: center;
+			line-height: 12px;
+			font-size: 0.95em;
+			color: #6f1c00;
+			padding: 1px 0 9px;
+			font-style: italic;
+		}
+	#footer .contact-details-form-wrapper {
+		padding: 65px 0 54px;
+		overflow: hidden;
+		border-bottom: 5px solid #cb4f24;
+	}
+		#footer .contact-form .contact-details-form-wrapper {
+		padding: 0;
+		overflow: hidden;
+		border: none;
+		}
+			#footer .contact-details {
+				float: left;
+				width: 48.4375%;
+			}
+				#footer .contact-details-wrapper {
+					background: #fff;
+					padding: 30px 70px 112px 37px;
+					-webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+					-moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+					box-shadow:  0 1px 2px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/					
+				}	
+				
+				* html #footer .contact-details-wrapper {
+					padding: 30px 70px 100px 37px;
+				} /* for IE 6 */
+				
+				* + html #footer .contact-details-wrapper { padding: 30px 70px 100px 37px;
+ }  /* for IE 7 */
+		
+				
+				
+				
+				
+				
+				
+				
+					
+					#footer .contact-details-form-wrapper h2 {
+						font-size: 2.35em;
+						line-height: 30px;
+						padding-bottom: 15px;
+						color: #fff;
+						font-weight: 400;
+					}
+						.wf-oswald-n4-active #footer .contact-details-form-wrapper h2 {
+							font-family: 'Oswald', sans-serif;
+						}
+						#footer .contact-details-form-wrapper p {
+							font-size: 1.4em;
+							margin-top: 14px;
+						}
+							#footer .contact-details-form-wrapper p label {
+								color: #333;
+								display: inline-block;
+							}
+								.wf-oswald-n4-active #footer .contact-details-form-wrapper p label {
+									font-family: 'Oswald', sans-serif;
+									font-weight: 400;
+								}
+
+		#footer .contact-form {
+			float: right;
+			width: 48.4375%;
+		}
+			.contact-form .webform-component-email {
+				margin: 4px 0;
+			}
+			.contact-form .form-item {
+				position: relative;
+			}
+			.contact-form form label {
+				line-height: 36px;
+				color: #c7c7c7;
+				font-size: 1.2em;
+			}
+	 			.wf-oswald-n4-active .contact-form form label {
+					font-family: 'Oswald', sans-serif;
+					font-weight: 400;
+	 			}
+				.contact-form .form-item label {
+					z-index: 10;
+					position: absolute; left: 13px; top: 0;
+					
+				}
+				.contact-form label span {
+					color: #c7c7c7;
+				}
+			.contact-form input,
+			.contact-form textarea { 
+				width: 99%;
+				padding: 0 3%;
+				height: 30px;
+				color: #c6c6c6;
+				border: 3px solid #fff;
+			}
+				.contact-form textarea {
+					padding: 15px 3%;
+					height: 143px;
+					width: 100%;
+				}
+				.contact-form .form-item:hover input.form-text,
+				.contact-form input.form-text:focus,
+				.contact-form .form-item:hover textarea,
+				.contact-form textarea:focus {
+					color: #223135;
+					background-color: #fff;
+				}
+			.contact-form .form-actions {
+				margin: 0;
+				-webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+				-moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+				box-shadow:  0 1px 2px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/					
+
+			}				
+				.contact-form .form-actions input { 
+					line-height: 44px;
+					height: auto;
+					color: #666;
+					width: 100%;
+					background: #ccc;
+					text-transform: uppercase;
+					cursor: pointer;
+					padding: 0;
+					font-size: 1.4em;
+					border: none;
+				}
+					.wf-oswald-n4-active .contact-form .form-actions input {
+						font-family: 'Oswald', sans-serif;
+					}
+		#footer .links-copyright-wrapper	{
+			border-top: 1px solid #f98100;
+			border-bottom: 1px solid #f98100;
+		}
+			#footer .links-copyright	{
+				border-bottom: 5px solid #cb4f24;
+				overflow: hidden;
+			}
+				#footer .footer-primary-links	{
+					float: left;
+				}
+					#footer .footer-primary-links	ul {
+						display: block;
+					}
+						#footer .footer-primary-links	li {
+							margin-right: 35px;
+							display: inline-block;
+						}
+						* html #footer .footer-primary-links	li {
+								display:inline; 
+								width: auto;
+								float: left;
+						} /* for IE 6 */
+						
+						* + html #footer .footer-primary-links	li { display:inline; width: auto; float: left; }  /* for IE 7 */
+						* + html #footer .footer-primary-links	li { display:block; }  /* for IE 7 */
+							#footer .footer-primary-links	li a {
+								color: #6f2e18;
+								text-transform: uppercase;
+								line-height: 52px;
+								display: inline-block;
+							}
+								.wf-oswald-n4-active #footer .footer-primary-links	li a {
+									font-family: 'Oswald', sans-serif;
+								}
+							#footer .footer-primary-links	li a:hover {
+								color: #fff;
+							}
+				#footer .copyright	{
+					float: right;
+					text-transform: uppercase;
+					line-height: 52px;
+					font-size: 1.1em;
+					color: #7c3900;
+				}
+					.wf-oswald-n4-active #footer .copyright	{
+						font-family: 'Oswald', sans-serif;
+					}
+		#footer .credits-wrapper {
+			border-bottom: 1px solid #f97f00;
+		}
+			#footer .credits-wrapper .credits {
+				text-align: right;
+				border-bottom: 1px solid #cb4f24;
+			}
+				#footer .credits-wrapper .credits a {
+					line-height: 40px;
+					text-transform: uppercase;
+					color: #7c3900;
+					font-size: 0.9em;
+				}
+					#footer .credits-wrapper .credits a span {
+						color: #fff;
+					}
+				#footer .credits-wrapper .credits a:hover {
+					color: #fff;
+				}
+
+#show-contacts {
+	border-bottom: solid 3px #cb4f24;
+	height: 42px;
+}
+	#show-contacts .wrapper {
+		height: 42px;
+		margin: 0 auto;
+		width: 170px;
+	}
+	#show-contacts .wrapper a {
+		display: block;
+		background: #cb4f24 url(../images/adriko-footer-contact-bg.jpg) no-repeat 130px 50%;
+		text-transform: uppercase;
+		line-height: 45px;
+		font-size: 1.2em;
+		text-align: center;
+		color: #fff;
+		padding: 0 50px 0 20px;
+	}
+
+
+
+/*** page wrapper ************************************************************************************/
+body.front .page-wrapper {
+	position: relative;
+	z-index: 10;
+	margin-bottom: 95px;
+}
+
+
+
+/*** 2 col layout ************************************************************************************/
+body.sidebar-second .page-cols-holder {
+	margin: 35px 0 30px;
+}
+body.sidebar-second .page-col-1 {
+	float: left;
+	width: 660px;
+	height: 1306px;
+	background: #fff none;
+	border: solid 1px #e4e3e2;
+	-webkit-box-shadow: 0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+	-moz-box-shadow: 0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+	box-shadow:  0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/					
+}
+	body.sidebar-second .page-col-1  #main-content {
+		padding: 30px;
+	}
+body.sidebar-second .page-col-2 {
+	float: right;
+	width: 285px;
+}
+	body.sidebar-second .page-col-2 .block {
+		margin-bottom: 15px;
+		border: solid 1px #ebeae9;
+		background: #fff none;
+		-webkit-box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+		-moz-box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+		box-shadow:  0 0px 4px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/					
+	}
+		body.sidebar-second .page-col-2 .block-last {
+			margin-bottom: 0;
+		}
+		body.sidebar-second .page-col-2 .block .content {
+			padding: 0 18px 40px;
+		}
+	body.sidebar-second .page-col-2 h2 {
+		text-align: center;
+		text-transform: uppercase;
+		font-size: 25px;
+		padding: 25px 0 15px;
+		border-bottom: solid 2px #ccc;
+		line-height: 1em;
+		margin: 0 18px;
+	}
+		.wf-oswald-n7-active body.sidebar-second .page-col-2 h2 {
+			font-family: "Oswald", sans-serif;
+		}
+/***@block = products ***********************************/
+#block-views-products-block-1 li.product-col-first {
+	padding: 35px 0 30px;
+}
+#block-views-products-block-1 a {
+	text-align: center;
+	background: no-repeat center top;
+	padding-top: 158px;
+	height: 30px;
+	display: block;
+}
+	#block-views-products-block-1 a span {
+		display: block;
+		height: 30px;
+		line-height: 30px;
+		color: #fff;
+		font-weight: bold;
+		font-size: 1.4em;
+		width: 160px;
+		margin: 0 auto;
+		background-color: #333;
+		text-transform: uppercase;
+	}
+		#block-views-products-block-1 a:hover span {
+			background-color: #e36700;
+		}
+		.wf-oswald-n7-active #block-views-products-block-1 a span {
+			font-family: "Oswald", sans-serif;
+		}
+
+
+/***@block = where to buy *******************************/
+#block-block-3 a {
+	display: block;
+	color: #666;
+	text-align: center;
+	font-size: 90%;
+}
+	#block-block-3 a:hover {
+		color: #1f75cc;
+	}
+#block-block-3 span {
+	display: block;
+}
+	#block-block-3 span.img {
+		margin: 15px 0 16px;
+		height: 100px;
+		background: #333;
+	}
+
+
+/***@page = home page ****************************************************************************************/
+
+/**** home page banner captions ****/
+#home-page-banner .desc {
+	width: 320px;
+	position: relative;
+}
+	#home-page-banner .desc a,
+	#home-page-banner .desc span {
+		display: block;
+	}
+	#home-page-banner .desc span.row-1,
+	#home-page-banner .desc span.row-2 {
+		padding: 15px 0 10px;
+		border-bottom: solid 3px #fff;
+		text-align: center;
+	}
+		#home-page-banner .desc span.row-1 {
+		}
+		#home-page-banner .desc span.row-2 {
+		}
+
+/***@block = home page banners ***/
+.home-page-banner {
+	position: relative;
+	z-index: 0;
+}
+.region-home-page-banner {
+	position: absolute;
+	left: 0; top: -70px;
+	width: 100%;
+}
+#block-views-banners-block #slider div {
+	display: none;
+}
+	#block-views-banners-block #slider div.banner-cnt-0 {
+		display: block;
+		height: 1020px;
+		overflow: hidden;
+	}
+	#block-views-banners-block #slider a,
+	#block-views-banners-block #slider img {
+		height: 100%;
+		display: block;
+	}
+#block-views-banners-block .banner-caption {
+	display: none;
+}
+	#block-views-banners-block .banner-caption-0 {
+		display: block;
+		margin-top: -1020px;
+		padding-top: 200px;
+	}
+
+body.page-loaded .region-home-page-banner {
+	display: none;
+}
+
+#supersized-loader { position:absolute; top:50%; left:50%; z-index:0; width:60px; height:60px; margin:-30px 0 0 -30px; text-indent:-999em; background:url(../img/progress.gif) no-repeat center center;}
+
+#supersized {  display:block; position:fixed; left:0; top:0; overflow:hidden; z-index:-999; height:100%; width:100%; }
+	#supersized img { width:auto; height:auto; position:relative; display:none; outline:none; border:none; }
+		#supersized.speed img { -ms-interpolation-mode:nearest-neighbor; image-rendering: -moz-crisp-edges; }	/*Speed*/
+		#supersized.quality img { -ms-interpolation-mode:bicubic; image-rendering: optimizeQuality; }			/*Quality*/
+	
+	#supersized li { display:block; list-style:none; z-index:-30; position:fixed; overflow:hidden; top:0; left:0; width:100%; height:100%; background:#111; }
+	#supersized a { width:100%; height:100%; display:block; }
+		#supersized li.prevslide { z-index:-20; }
+		#supersized li.activeslide { z-index:-10; }
+		#supersized li.image-loading { background:#111 url(../img/progress.gif) no-repeat center center; width:100%; height:100%; }
+			#supersized li.image-loading img{ visibility:hidden; }
+		#supersized li.prevslide img, #supersized li.activeslide img{ display:inline; }
+
+/***@block = home page teasers ******/
+#block-views-home-page-teasers-block {
+	margin-top: 500px;
+}
+#block-views-home-page-teasers-block .view-content {
+	padding: 20px 15px 0;
+	overflow: hidden;
+	height: 290px;
+	background: url(../images/adriko-ie-home-page.png) repeat;
+	background: rgba(0,0,0,0.75);
+}
+
+* html #block-views-home-page-teasers-block .view-content {
+	background: #000;
+} /* for IE 6 */
+
+* + html #block-views-home-page-teasers-block .view-content {	background: #000; }  /* for IE 7 */
+#block-views-home-page-teasers-block .views-row {
+	float: left;
+	width: 300px;
+}
+	#block-views-home-page-teasers-block .views-row-2 {
+		padding: 0 15px;
+	}
+#block-views-home-page-teasers-block a,
+#block-views-home-page-teasers-block span,
+#block-views-home-page-teasers-block img {
+	display: block;
+}
+#block-views-home-page-teasers-block a:hover {
+	border-bottom: 3px solid #000;
+}
+	#block-views-home-page-teasers-block a span.img-text {
+		border: 2px solid #2b3640;
+		border: 2px solid rgba(0,0,0,0);
+	}
+* html #block-views-home-page-teasers-block a span.img-text {
+	border: 2px solid #000;
+} /* for IE 6 */
+
+* + html #block-views-home-page-teasers-block a span.img-text {	border: 2px solid #000; }  /* for IE 7 */
+	#block-views-home-page-teasers-block a span.title {
+		color: #fff;
+		text-transform: uppercase;
+		text-align: center;
+		line-height: 1em;
+		padding-bottom: 15px;
+		font-size: 1.55em;
+	}
+	.wf-oswald-n7-active #block-views-home-page-teasers-block a span.title {
+		font-family: "Oswald", sans-serif;
+	}
+	
+	#block-views-home-page-teasers-block a:hover span.title {
+		color: #ffc600;
+	}
+	#block-views-home-page-teasers-block a:hover span.img-text {
+		border: 2px solid #ffc600;
+	}
+		#block-views-home-page-teasers-block a span.img-text span.img {
+			width: 296px;
+			height: 108px;
+			overflow: hidden;
+		}
+			#block-views-home-page-teasers-block a span.img-text span.img img {
+				background: #515151;
+			}
+		
+	
+	#block-views-home-page-teasers-block a span.text {
+		color: #333;
+		background: #fff;
+		padding: 20px 38px 0;
+		height: 75px;
+	}
+	#block-views-home-page-teasers-block a:hover span.text {
+		background: #ffc600;
+		color: #000;
+	}
+
+
+/*** @page companies ************************************************************************************/
+body.node-type-company #main-content h2 {
+	margin: 30px 0 15px;
+	text-transform: uppercase;
+	font-size: 30px;
+	font-weight: 700;
+}
+	.wf-oswald-n7-active body.node-type-company #main-content h2 {
+		font-family: "Oswald", sans-serif;
+	}
+body.node-type-company #main-content p {
+	margin: 20px 0 0;
+}
+
+
+
+/*** @page about css ************************************************************************************/
+
+#node-8 .field-item {
+	padding-top: 279px;
+	margin-top: 28px;
+	background: url(../images/adriko-about-us-banner.jpg) no-repeat center top;
+}
+#about-scroller {
+	text-align: center;
+}
+	#about-scroller ul {
+		padding: 35px 0 51px;
+		border-bottom: 1px solid #ccc;
+	}
+		#about-scroller ul li {
+			font-size: 1.1em;
+			margin-bottom: 20px;
+		}
+.vision-who-mission-wrapper {
+	border-bottom: 1px solid #fff;
+}
+	.vision-who-mission-wrapper .vision-who-mission {
+		padding: 20px 0;
+		border-top: 1px solid #fff;
+		border-bottom: 1px solid #ccc;
+	}
+		.vision-who-mission .about-snippet {
+			width: 28.72%;
+			float: left;
+			background: #e46900;
+			color: #fff;
+			text-align: center;
+			padding: 37px 20px 48px 20px;
+		}
+		.vision-who-mission .about-vision {
+			border-left: 6px solid #fff;
+			border-right: 6px solid #fff;
+		}
+			.vision-who-mission .about-snippet h2 {
+				font-size: 2.35em;
+				font-weight: bold;
+				text-transform: uppercase;
+				padding-bottom: 28px;
+				line-height: 1em;
+			}
+				.wf-oswald-n4-active .vision-who-mission .about-snippet h2 {
+					font-family: 'Oswald', sans-serif;
+				}
+.team-wrapper {
+	border-top: 1px solid #fff;
+	text-align: center;
+	padding-top: 49px;
+}
+.team-wrapper .team {
+}
+	.team-wrapper .team ul {
+		overflow: hidden;
+		padding: 24px 25% 90px;
+	}
+		.team-wrapper .team li {
+			float: left;
+			width: 233px;
+			padding: 193px 0 37px;
+			text-align: center;
+			border: 1px solid #ebeae9;
+			border-top: 1px solid #f6f5f4;
+			background: url(../images/adriko-about-us-team.jpg) no-repeat top;
+		-webkit-box-shadow: 0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+		-moz-box-shadow: 0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+		box-shadow:  0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/					
+		}
+		.team-wrapper .team li.staff-1 {
+			background-position: 0 0;
+			margin-right: 10px;
+		}
+		.team-wrapper .team li.staff-2 {
+			background-position: -233px 0;
+		}
+		
+			.team-wrapper .team li span {
+				display: block;
+				text-transform: uppercase;
+				line-height: 1em;
+			}
+			.team-wrapper .team li span.name {
+				font-size: 1.4em;
+				line-height: 1em;
+				font-weight: bold;
+				padding-bottom: 6px;
+			}
+			.team-wrapper .team li span.posn {
+				font-weight: 500;
+			}
+			.wf-oswald-n4-active .team-wrapper .team li span.name {
+				font-family: 'Oswald', sans-serif;
+				font-weight: normal;
+			}
+		
+		
+
+/*** @page where to buy ************************************************************************************/
+#locations-map {
+	height: 450px;
+}
+
+
+/***@page = Adriko Group ****************************************************************************************/
+body.page-node-16 .h1-wrapper {
+}
+body.page-node-16 .content-strip-1 {
+	text-align: center;
+	padding: 26px 0 53px;
+}
+body.page-node-16 .content-strip-2 {
+	padding: 30px;
+	border: 1px solid #e4e3e2;
+	background: #fff;
+		-webkit-box-shadow: 0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+		-moz-box-shadow: 0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+		box-shadow:  0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/					
+}
+	body.page-node-16 .content-strip-2 .distillery-landing-page {
+	}
+		body.page-node-16 .distillery-landing-page .img {
+			float: left;
+			width: 355px;
+			border-right: 40px solid #fff;
+		}
+		body.page-node-16 .distillery-landing-page .desc {
+			float: left;
+			width: 480px;
+		}
+			body.page-node-16 .distillery-landing-page .desc h2 {
+				padding: 8px 0 25px;
+			}
+				body.page-node-16 .distillery-landing-page .desc h2 a {
+					font-size: 1.8em;
+					line-height: 35px;
+					color: #333;
+					text-transform: uppercase;
+				}
+				.wf-oswald-n7-active .distillery-landing-page .desc h2 a {
+					font-family: 'Oswald', sans-serif;
+				}
+		body.page-node-16 .distillery-landing-page .desc .link {
+			margin-top: 25px;
+		}
+			body.page-node-16 .distillery-landing-page .desc .link a {
+				color: #fff;
+				background: #e16100;
+				padding: 7px 20px;
+				text-transform: uppercase;
+			}
+				.wf-oswald-n7-active body.page-node-16 .distillery-landing-page .desc .link a {
+					font-family: 'Oswald', sans-serif;
+				}
+
+#block-views-companies-block-1,
+#block-views-companies-block-2 {
+	margin-top: 20px;
+	border-top: 1px solid #ccc;
+}
+	#block-views-companies-block-1 .view-content,
+	#block-views-companies-block-2 .view-content {
+		height: 322px;
+		padding: 20px 0 135px;
+		border-top: 1px solid #fff;
+	}
+	#block-views-companies-block-1 .views-row,
+	#block-views-companies-block-2 .views-row {
+		float: left;
+		width: 233px;
+		height: 322px;
+		background: #fff;
+		margin-right: 9px;
+		overflow: hidden;
+		-webkit-box-shadow: 0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+		-moz-box-shadow: 0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+		box-shadow:  0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/					
+	}
+	#block-views-companies-block-1 .views-row-last,
+	#block-views-companies-block-2 .views-row-last {
+		margin: 0;
+	}
+	#block-views-companies-block-1 span.field-content a,
+	#block-views-companies-block-1 a span.img img,
+	#block-views-companies-block-2 span.field-content a,
+	#block-views-companies-block-2 a span.img img {
+		display: block;
+	}
+		#block-views-companies-block-1 a,
+		#block-views-companies-block-2 a {
+			height: 322px;
+			color: #333;
+		}
+		#block-views-companies-block-1 a:hover,
+		#block-views-companies-block-2 a:hover {
+			background: #e16100;
+			color: #fff;
+		}
+		#block-views-companies-block-1 a span,
+		#block-views-companies-block-2 a span {
+			display: block;
+			text-align: center;
+		}
+		#block-views-companies-block-1 a span.img,
+		#block-views-companies-block-2 a span.img {
+			background: #ccc;
+			height: 135px;
+		}
+		#block-views-companies-block-1 a span.desc,
+		#block-views-companies-block-2 a span.desc {
+			position: relative;
+		}
+			#block-views-companies-block-1 a span.desc span.title,
+			#block-views-companies-block-2 a span.desc span.title {
+				padding: 20px 16px;
+				text-transform: uppercase;
+				font-size: 1.4em;
+			}
+				.wf-oswald-n7-active #block-views-companies-block-1 a span.desc span.title,
+				.wf-oswald-n7-active #block-views-companies-block-2 a span.desc span.title {
+					font-family: 'Oswald', sans-serif;
+					font-weight: bold;
+				}
+			#block-views-companies-block-1 a span.desc span.body,
+			#block-views-companies-block-2 a span.desc span.body {
+				padding: 0 16px 30px;
+			}
+			#block-views-companies-block-1 a span.desc span.link,
+			#block-views-companies-block-2 a span.desc span.link {
+				color: #fff;
+				text-transform: uppercase;
+				padding: 8px 10px;
+				line-height: 1em;
+				display: initial;
+				background: #e16100;
+				position: absolute;
+				left: 75px;
+				top: 142px;
+			}
+				.wf-oswald-n7-active #block-views-companies-block-1 a span.desc span.link,
+				.wf-oswald-n7-active #block-views-companies-block-2 a span.desc span.link {
+					font-family: 'Oswald', sans-serif;
+				}
+			#block-views-companies-block-1 a:hover span.desc span.link,
+			#block-views-companies-block-2 a:hover span.desc span.link {
+				background: #333;
+			}
+
+
+/***@page = Our History ****************************************************************************************/
+	body.page-node-15 .h1-wrapper h1 {
+		display: none;
+	}
+		#node-15	.field-item p {
+			padding: 25px 0 0;
+			text-align: center;
+			font-size: 1.1em;
+		}
+#block-views-history-block .history-year {
+	text-align: center;
+	padding-top: 30px;
+	background: url(../images/adriko-history-strip.jpg) no-repeat center;
+}
+#block-views-history-block .year-first .history-year {
+	background-position-y: 30px;
+}
+.wf-oswald-n4-active #block-views-history-block .history-year-items-wrapper .desc h2 {
+	font-family: 'Oswald', sans-serif;
+	font-weight: bold;
+}
+	#block-views-history-block .history-year-figure {
+		font-size: 1.4em;
+		display: inline-block;
+		font-weight: bold;
+		line-height: 1em;
+		color: #fff;
+		background: #999;
+		padding: 9px 25px;
+		margin: 0 auto 3px;
+	}
+	.wf-oswald-n4-active #block-views-history-block .history-year-figure {
+		font-family: 'Oswald', sans-serif;
+		font-weight: bold;
+	}
+#block-views-history-block .year-last .history-year-items-wrapper {
+	padding-bottom: 72px;
+}
+#block-views-history-block .history-year-items-wrapper {
+	background: url(../images/adriko-history-strip.jpg) repeat-y center;
+}
+
+	#block-views-history-block .history-year-item {
+		padding: 30px;
+		background: #fff;
+		border-top: 1px solid #f0efee;
+		-webkit-box-shadow: 0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** webkit **/
+		-moz-box-shadow: 0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** mozilla **/
+		box-shadow:  0px 2px 3px 0 rgba(0, 0, 0, 0.2); /** pure css3 **/					
+	}
+	#block-views-history-block .year-1978 .year-item-odd,
+	#block-views-history-block .year-2005 .year-item-odd,
+	#block-views-history-block .year-2010 .year-item-odd,
+	#block-views-history-block .year-2012 .year-item-odd {
+		margin-top: 30px;
+	}
+	
+	
+		#block-views-history-block .history-year-items-wrapper .images {
+			float: right;
+			width: 386px;
+			height: 266px;
+			background: #333;
+		}
+		#block-views-history-block .history-year-items-wrapper .desc {
+			float: left;
+			width: 480px;
+		}
+		#block-views-history-block .year-cnter-0 .images,
+		#block-views-history-block .year-cnter-2 .year-item-even .images,
+		#block-views-history-block .year-cnter-3 .images,
+		#block-views-history-block .year-cnter-5 .images,
+		#block-views-history-block .year-cnter-6 .year-item-odd .images,
+		#block-views-history-block .year-cnter-8 .images,
+		#block-views-history-block .year-cnter-9 .year-item-odd .images,
+		#block-views-history-block .year-cnter-11 .year-item-even .images {
+			float: left;
+		}
+		#block-views-history-block .year-cnter-0 .desc,
+		#block-views-history-block .year-cnter-2 .year-item-even .desc,
+		#block-views-history-block .year-cnter-3 .desc,
+		#block-views-history-block .year-cnter-5 .desc,
+		#block-views-history-block .year-cnter-6 .year-item-odd .desc,
+		#block-views-history-block .year-cnter-8 .desc,
+		#block-views-history-block .year-cnter-9 .year-item-odd .desc,
+		#block-views-history-block .year-cnter-11 .year-item-even .desc {
+			float: right;
+		}
+			#block-views-history-block .history-year-items-wrapper .desc h2 {
+				text-transform: uppercase;
+				font-size: 1.6em;
+				padding: 8px 0 10px;
+			}
+			.wf-oswald-n4-active #block-views-history-block .history-year-items-wrapper .desc h2 {
+				font-family: 'Oswald', sans-serif;
+				font-weight: bold;
+			}
+	
+	
+	
+	
+	
